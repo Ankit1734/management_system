@@ -1,13 +1,15 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App(){
+  /*
   const[student, setStudent] = useState(null);
 
   const getStudent = async() => {
     const response = await fetch("http://localhost:8080/student");
     const data = await response.json();
     setStudent(data);
+  
   };
   return (
     <div style = {{padding : "40px" }}>
@@ -23,6 +25,38 @@ function App(){
           </div>
         )
       }
+    </div>
+  ); */
+  const[students, setStudents] = useState([]);
+
+  const getStudent = async() => {
+    const response = await fetch("http://localhost:8080/student");
+
+    const data = await response.json();
+    setStudents(data);
+  }; 
+
+  useEffect( () => {
+    getStudent();
+  }, []);  
+
+  return (
+    <div>
+
+      <h1>Student List</h1>
+
+      {
+        students.map((student) => (
+          <div key={student.id}>
+          
+            <h3> 
+            {student.name} - {student.course}  
+
+            </h3>
+          </div>
+        ))
+      }
+
     </div>
   );
 }
