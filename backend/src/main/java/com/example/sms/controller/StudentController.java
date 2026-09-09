@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.sms.model.Student;
 
+
 @RestController
 @RequestMapping("/student")
 @CrossOrigin("*")
 public class StudentController {
+
+    @Autowired 
+    JdbcTemplate jdbcTemplate;
 
     @GetMapping
     public ArrayList<Student> getStudent() {
@@ -41,6 +47,17 @@ public List<String> getName(){
                        .map(Student::getName)
                        .collect(Collectors.toList());
 }
+@GetMapping("/count")
+public int countStudents() {
+
+    String sql = "SELECT COUNT(*) FROM student";
+
+    return jdbcTemplate.queryForObject(
+            sql,
+            Integer.class
+    );
+}
+
 
 
 }

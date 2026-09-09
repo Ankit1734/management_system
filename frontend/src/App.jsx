@@ -11,6 +11,8 @@ function App() {
   // For Bca student
   const [bcaStudents, setBcaStudents] = useState([]);
 
+  // Count of all student
+  const [count, setCount] = useState(0);
   // Get single student
   const getSingleStudent = async () => {
 
@@ -42,6 +44,12 @@ function App() {
     getSingleStudent;
     getStudents();
     getBcaStudents();
+
+    fetch(
+      "http://localhost:8080/student/count"
+    )
+      .then(res => res.json())
+      .then(data => setCount(data));
   }, []);
 
   return (
@@ -85,6 +93,15 @@ function App() {
     </h3>
   </div>
 ))}
+
+{/* Count student */}
+<div>
+
+<h1>
+  Total Students : {count}
+</h1>
+
+</div>
 
 
     </div>
