@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.sms.model.Student;
+import com.example.sms.service.StudentService;
 
 
 @RestController
 @RequestMapping("/student")
 @CrossOrigin("*")
 public class StudentController {
+
+    @Autowired 
+    private StudentService service;
+
 
     @Autowired 
     JdbcTemplate jdbcTemplate;
@@ -56,6 +61,14 @@ public int countStudents() {
             sql,
             Integer.class
     );
+}
+@GetMapping("/message")
+public String getMessage(){
+    return service.getMessage();
+}
+@GetMapping("/counts")
+public Integer countStudent(){
+    return service.getStudentCount();
 }
 
 
