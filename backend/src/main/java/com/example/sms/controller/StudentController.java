@@ -1,6 +1,5 @@
 package com.example.sms.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,24 +20,21 @@ import com.example.sms.service.StudentService;
 public class StudentController {
 
     @Autowired 
-    private StudentService service;
+    private final StudentService service;
 
 
     @Autowired 
     JdbcTemplate jdbcTemplate;
 
-    @GetMapping
-    public ArrayList<Student> getStudent() {
-    ArrayList<Student> students = new ArrayList<>();
-      
-    students.add(new Student(1, "John", "Mca"));
-    students.add(new Student(2, "Tushar", "Bca"));
-    students.add(new Student(3, "Aman", "Bca"));
-    students.add(new Student(2, "Rahul", "Mca"));
-    students.add(new Student(3, "Ajay", "Mca"));
-
-    return students;
-}
+    public StudentController(StudentService service) { 
+        this.service = service; 
+    
+    } 
+     @GetMapping 
+     public List<Student> getStudent() { 
+        return service.getAllStudents(); 
+    }
+   
 @GetMapping("/bca")
 public List<Student> getBcaStudent(){
     return getStudent().stream()
@@ -70,6 +66,8 @@ public String getMessage(){
 public Integer countStudent(){
     return service.getStudentCount();
 }
+
+
 
 
 
