@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 function App() {
+  const[name, setName] = useState("");
+  const[course, setCourse] = useState("");
 
   // For single student
   const [student, setStudent] = useState(null);
@@ -38,7 +40,26 @@ function App() {
     const data = await response.json();
     setBcaStudents(data);
   }
-
+  const addStudent = async () => {
+    await fetch(
+      "http://localhost:8080/student",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          course
+        })
+      }
+    );
+  
+    setName("");
+    setCourse("");
+  
+    getStudents();
+  };
   // Automatically get all students when page loads
   useEffect(() => {
     getSingleStudent;
@@ -54,7 +75,29 @@ function App() {
 
   return (
     <div style={{ padding: "40px" }}>
+            {/* add Student */}
+            <input
+            type = "text"
+            placeholder="Enter Name"
+            value = {name}
+            onChange = {(e) => setName(e.target.value)}
+            />
 
+            <br></br>
+
+            <input
+            type = "text"
+            placeholder="Enter Course"
+            value = {course}
+            onChange = {(e) => setCourse(e.target.value)}
+            />
+
+            <br></br>
+
+            <button onClick = {addStudent}>
+              AddStudent
+            </button>
+            <hr/>
       {/* Single Student */}
       <h1>Get Single Student</h1>
 
@@ -84,7 +127,7 @@ function App() {
 
        {/* BCA STUDENTS */}
 
-       <h1>BCA Students</h1>
+      <h1>BCA Students</h1>
 
 {bcaStudents.map(student => (
   <div key={student.id}>

@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.sms.model.Student;
 import com.example.sms.service.StudentService;
+
 
 
 @RestController
@@ -30,6 +33,16 @@ public class StudentController {
         this.service = service; 
     
     } 
+    @PostMapping
+    public Student addStudent(@RequestBody Student student){
+        return service.saveStudent(student);
+    }
+    public String postMethodName(@RequestBody String entity) {
+        //TODO: process POST request
+        
+        return entity;
+    }
+    
      @GetMapping 
      public List<Student> getStudent() { 
         return service.getAllStudents(); 
