@@ -16,6 +16,18 @@ public class StudentService {
     public StudentService(StudentRepository repository) {
         this.repository = repository;
     }
+    public Student updateStudent(Integer id, Student student){
+        Student existingStudent = repository.findById(id)
+                            .orElseThrow(() -> new RuntimeException("Student not found"));
+
+                            existingStudent.setName(student.getName());  
+                            existingStudent.setCourse(student.getCourse());
+                            
+                            return repository.save(existingStudent);
+    }
+    public void deleteStudent(Integer id){
+        repository.deleteById(id);
+    }
     public Student saveStudent(Student student) {
         return repository.save(student);
     }
