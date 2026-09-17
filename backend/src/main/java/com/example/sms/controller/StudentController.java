@@ -4,17 +4,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import com.example.sms.dto.StudentRequestDTO;
+import com.example.sms.dto.StudentResponseDTO;
 import com.example.sms.model.Student;
 import com.example.sms.service.StudentService;
 
@@ -36,21 +39,24 @@ public class StudentController {
         this.service = service; 
     
     } @DeleteMapping("/{id}")
-    public String deleteStudent(
+    public ResponseEntity<?> deleteStudent(
         @PathVariable Integer id){
-            service.deleteStudent(id);
-            return "Student deleted successfully";
+            
+            return ResponseEntity.ok(service.deleteStudent(id));
         }
+        
     @PutMapping("/{id}")
-    public Student updateStudent(
-        @PathVariable Integer id,
-        @RequestBody Student student
-    ) {
-        return service.updateStudent(id, student);
-    }
+public ResponseEntity<?> updateStudent(@PathVariable Integer id, @RequestBody StudentRequestDTO dto) {
+
+    return ResponseEntity.ok(
+            service.updateStudent(id,dto)
+    );
+}
+        
     @PostMapping
-    public Student addStudent(@RequestBody Student student){
-        return service.saveStudent(student);
+    public ResponseEntity<?> addStudent(@RequestBody StudentRequestDTO dto){
+        Student student = service.addStudent(dto);
+        return ResponseEntity.ok(student);
     }
     public String postMethodName(@RequestBody String entity) {
         //TODO: process POST request
@@ -58,11 +64,11 @@ public class StudentController {
         return entity;
     }
     
-     @GetMapping 
-     public List<Student> getStudent() { 
+@GetMapping 
+    public List<Student> getStudent() { 
         return service.getAllStudents(); 
     }
-   
+
 @GetMapping("/bca")
 public List<Student> getBcaStudent(){
     return getStudent().stream()
@@ -93,6 +99,20 @@ public String getMessage(){
 @GetMapping("/counts")
 public Integer countStudent(){
     return service.getStudentCount();
+}
+@GetMapping("/{id}")
+public ResponseEntity<?> getStudent(@PathVariable Integer id) {
+
+    Student student = service.getStudentById(id);
+
+    StudentResponseDTO response = new StudentResponseDTO(
+                    student.getId(),
+                    student.getName(),
+                    student.getCourse()
+                   
+            );
+
+    return ResponseEntity.ok(response);
 }
 
 
