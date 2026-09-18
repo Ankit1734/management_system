@@ -4,6 +4,9 @@ function App() {
   const[name, setName] = useState("");
   const[course, setCourse] = useState("");
 
+  const[username, setUsername] = useState("");
+  const[password, setPassword] = useState("");
+
   // For single student
   const [student, setStudent] = useState(null);
 
@@ -60,6 +63,26 @@ function App() {
   
     getStudents();
   };
+  const login = async () => {
+    const response = await fetch(
+      "http://localhost:8080/auth/login",{
+        method: "POST",
+
+        header:{
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username, password
+        })
+      }
+    );
+    const token = await response.text();
+    localStorage.setItem(
+      "token",
+      token
+    );
+    alert("Login Success");
+  }
   // Automatically get all students when page loads
   useEffect(() => {
     getSingleStudent;
@@ -143,6 +166,18 @@ function App() {
 <h1>
   Total Students : {count}
 </h1>
+
+<input
+placeholder="Username"
+onChange={(e)=>setUsername(e.target.value)}
+/>
+
+<input
+placeholder="Password"
+onChange={(e)=>setPassword(e.target.value)}
+/>
+
+<button onClick={login}>Login</button>
 
 </div>
 
